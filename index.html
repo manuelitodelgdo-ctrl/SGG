@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGG Premium</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+min-height:100vh;
+background:url("ciudad_dia.jpg");
+background-size:cover;
+background-position:center;
+display:flex;
+justify-content:center;
+align-items:center;
+transition:.5s;
+}
+
+body.dark{
+background:url("ciudad_noche.jpg");
+background-size:cover;
+background-position:center;
+}
+
+.container{
+width:95%;
+max-width:1000px;
+}
+
+.card{
+background:rgba(15,15,15,.92);
+backdrop-filter:blur(10px);
+border:1px solid #d4af37;
+border-radius:20px;
+padding:30px;
+color:white;
+box-shadow:0 0 25px rgba(212,175,55,.4);
+}
+
+.logo{
+text-align:center;
+margin-bottom:20px;
+}
+
+.logo h1{
+color:#d4af37;
+font-size:38px;
+}
+
+.logo p{
+color:#ccc;
+}
+
+input,select{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:10px;
+background:#222;
+color:white;
+outline:none;
+}
+
+button{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold;
+transition:.3s;
+}
+
+.btn-gold{
+background:#d4af37;
+color:black;
+}
+
+.btn-gold:hover{
+transform:scale(1.02);
+}
+
+.btn-dark{
+background:#222;
+color:white;
+}
+
+.row{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+}
+
+.hidden{
+display:none;
+}
+
+#msg{
+text-align:center;
+margin-top:15px;
+font-weight:bold;
+}
+
+.dashboard{
+display:grid;
+grid-template-columns:1fr 1fr 1fr;
+gap:15px;
+margin-top:20px;
+}
+
+.box{
+background:#1c1c1c;
+padding:20px;
+border-radius:15px;
+text-align:center;
+border:1px solid #333;
+}
+
+.box h3{
+color:#d4af37;
+}
+
+table{
+width:100%;
+margin-top:20px;
+border-collapse:collapse;
+}
+
+th{
+background:#d4af37;
+color:black;
+padding:10px;
+}
+
+td{
+padding:10px;
+background:#1f1f1f;
+text-align:center;
+border-bottom:1px solid #333;
+}
+
+.theme{
+position:fixed;
+top:20px;
+right:20px;
+width:55px;
+height:55px;
+border-radius:50%;
+font-size:22px;
+background:#d4af37;
+color:black;
+}
+
+#feliz{
+display:none;
+position:fixed;
+inset:0;
+background:url("feliz.jpg");
+background-size:cover;
+background-position:center;
+justify-content:center;
+align-items:center;
+z-index:999;
+}
+
+#feliz h1{
+background:rgba(0,0,0,.7);
+padding:20px;
+border-radius:15px;
+color:white;
+}
+
+</style>
+</head>
+
+<body>
+
+<button id="themeBtn" class="theme">🌙</button>
+
+<div id="feliz">
+<h1>🎉 Bienvenido a SGG Premium</h1>
+</div>
+
+<div class="container">
+
+<div id="auth" class="card">
+
+<div class="logo">
+<h1>💰 SGG Premium</h1>
+<p>Sistema de Gestión de Gastos</p>
+</div>
+
+<div class="row">
+
+<div>
+
+<h2>Iniciar Sesión</h2>
+
+<input id="loginUser" placeholder="Usuario">
+
+<input id="loginPass" type="password" placeholder="Contraseña">
+
+<button class="btn-gold" onclick="login()">
+Ingresar
+</button>
+
+</div>
+
+<div>
+
+<h2>Crear Cuenta</h2>
+
+<button onclick="verUsuarios()">Ver Usuarios</button>
+
+<input id="regNombre" placeholder="Nombre completo">
+
+<input id="regUsuario" placeholder="Usuario">
+
+<input id="regCorreo" placeholder="Correo">
+
+<input id="regPass" type="password" placeholder="Contraseña">
+
+<button class="btn-gold" onclick="registrar()">
+Crear Cuenta
+</button>
+
+</div>
+
+</div>
+
+<p id="msg"></p>
+
+</div>
+
+<div id="panel" class="card hidden">
+
+<h1 id="saludo"></h1>
+
+<div class="dashboard">
+
+<div class="box">
+<h3>Total Gastado</h3>
+<h2>$ <span id="total">0</span></h2>
+</div>
+
+<div class="box">
+<h3>Cantidad Gastos</h3>
+<h2 id="cantidad">0</h2>
+</div>
+
+<div class="box">
+<h3>Estado</h3>
+<h2>Activo</h2>
+</div>
+
+</div>
+<div style="margin-top:25px;">
+
+<h2>➕ Registrar Gasto</h2>
+
+<input id="concepto" placeholder="Concepto del gasto">
+
+<input id="monto" type="number" placeholder="Monto">
+
+<select id="categoria">
+<option>Comida</option>
+<option>Transporte</option>
+<option>Hogar</option>
+<option>Educación</option>
+<option>Ocio</option>
+<option>Otros</option>
+</select>
+
+<button class="btn-gold" onclick="agregarGasto()">
+Guardar Gasto
+</button>
+
+</div>
+
+<table>
+
+<thead>
+
+<tr>
+<th>Concepto</th>
+<th>Monto</th>
+<th>Categoría</th>
+<th>Eliminar</th>
+</tr>
+
+</thead>
+
+<tbody id="tablaGastos">
+
+</tbody>
+
+</table>
+
+<button
+class="btn-dark"
+onclick="cerrarSesion()"
+style="margin-top:20px;">
+🚪 Cerrar Sesión
+</button>
+
+</div>
+
+</div>
+
+<script>
+function verUsuarios(){
+console.log(
+JSON.parse(localStorage.getItem("usuarios"))
+);
+alert(
+JSON.stringify(
+JSON.parse(localStorage.getItem("usuarios"))
+)
+);
+}
+const auth =
+document.getElementById("auth");
+
+const panel =
+document.getElementById("panel");
+
+const msg =
+document.getElementById("msg");
+
+const saludo =
+document.getElementById("saludo");
+
+const feliz =
+document.getElementById("feliz");
+
+function obtenerUsuarios(){
+
+return JSON.parse(
+localStorage.getItem("usuarios")
+|| "[]"
+);
+
+}
+
+function guardarUsuarios(lista){
+
+localStorage.setItem(
+"usuarios",
+JSON.stringify(lista)
+);
+
+}
+
+function registrar(){
+
+const nombre =
+document.getElementById("regNombre").value;
+
+const usuario =
+document.getElementById("regUsuario").value;
+
+const correo =
+document.getElementById("regCorreo").value;
+
+const password =
+document.getElementById("regPass").value;
+
+if(
+!nombre ||
+!usuario ||
+!correo ||
+!password
+){
+msg.innerHTML =
+"❌ Completa todos los campos";
+return;
+}
+
+let usuarios =
+obtenerUsuarios();
+
+if(
+usuarios.find(
+u=>u.usuario===usuario
+)
+){
+msg.innerHTML =
+"❌ Ese usuario ya existe";
+return;
+}
+
+usuarios.push({
+
+nombre,
+usuario,
+correo,
+password
+
+});
+
+guardarUsuarios(usuarios);
+
+msg.innerHTML =
+"✅ Cuenta creada correctamente";
+
+}
+
+function login(){
+
+const usuario =
+document.getElementById("loginUser").value;
+
+const password =
+document.getElementById("loginPass").value;
+
+const usuarios =
+obtenerUsuarios();
+
+const encontrado =
+usuarios.find(
+
+u =>
+u.usuario===usuario &&
+u.password===password
+
+);
+
+if(!encontrado){
+
+msg.innerHTML =
+"❌ Usuario o contraseña incorrectos";
+
+return;
+
+}
+
+localStorage.setItem(
+"usuarioActivo",
+usuario
+);
+
+mostrarPanel();
+
+}
+
+function mostrarPanel(){
+
+auth.classList.add("hidden");
+
+panel.classList.remove("hidden");
+
+const usuario =
+localStorage.getItem(
+"usuarioActivo"
+);
+
+saludo.innerHTML =
+"👋 Bienvenido, " + usuario;
+
+feliz.style.display =
+"flex";
+
+setTimeout(()=>{
+
+feliz.style.display =
+"none";
+
+},2500);
+
+cargarGastos();
+
+}
+function obtenerGastos(){
+
+const usuario =
+localStorage.getItem(
+"usuarioActivo"
+);
+
+return JSON.parse(
+
+localStorage.getItem(
+"gastos_" + usuario
+)
+
+|| "[]"
+
+);
+
+}
+
+function guardarGastos(gastos){
+
+const usuario =
+localStorage.getItem(
+"usuarioActivo"
+);
+
+localStorage.setItem(
+
+"gastos_" + usuario,
+
+JSON.stringify(gastos)
+
+);
+
+}
+
+function agregarGasto(){
+
+const concepto =
+document.getElementById(
+"concepto"
+).value;
+
+const monto =
+document.getElementById(
+"monto"
+).value;
+
+const categoria =
+document.getElementById(
+"categoria"
+).value;
+
+if(
+!concepto ||
+!monto
+){
+alert(
+"Completa todos los campos"
+);
+return;
+}
+
+let gastos =
+obtenerGastos();
+
+gastos.push({
+
+concepto,
+monto:Number(monto),
+categoria
+
+});
+
+guardarGastos(
+gastos
+);
+
+document.getElementById(
+"concepto"
+).value="";
+
+document.getElementById(
+"monto"
+).value="";
+
+cargarGastos();
+
+}
+
+function eliminarGasto(i){
+
+let gastos =
+obtenerGastos();
+
+gastos.splice(i,1);
+
+guardarGastos(
+gastos
+);
+
+cargarGastos();
+
+}
+
+function cargarGastos(){
+
+const tabla =
+document.getElementById(
+"tablaGastos"
+);
+
+tabla.innerHTML="";
+
+let gastos =
+obtenerGastos();
+
+let total = 0;
+
+gastos.forEach(
+
+(gasto,index)=>{
+
+total += gasto.monto;
+
+tabla.innerHTML += `
+
+<tr>
+
+<td>${gasto.concepto}</td>
+
+<td>$${gasto.monto}</td>
+
+<td>${gasto.categoria}</td>
+
+<td>
+
+<button
+onclick="eliminarGasto(${index})"
+style="
+background:red;
+color:white;
+border:none;
+padding:8px;
+border-radius:8px;
+cursor:pointer;
+">
+
+🗑️
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+}
+
+);
+
+document.getElementById(
+"total"
+).innerText = total;
+
+document.getElementById(
+"cantidad"
+).innerText =
+gastos.length;
+
+}
+
+function cerrarSesion(){
+
+localStorage.removeItem(
+"usuarioActivo"
+);
+
+location.reload();
+
+}
+
+document.getElementById(
+"themeBtn"
+)
+
+.addEventListener(
+
+"click",
+
+()=>{
+
+document.body.classList.toggle(
+"dark"
+);
+
+document.getElementById(
+"themeBtn"
+).textContent =
+
+document.body.classList.contains(
+"dark"
+)
+
+? "☀️"
+: "🌙";
+
+}
+
+);
+
+if(
+
+localStorage.getItem(
+"usuarioActivo"
+)
+
+){
+
+mostrarPanel();
+
+}
+
+</script>
+
+</body>
+</html>
